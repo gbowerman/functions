@@ -1,6 +1,6 @@
 # gfuncproj to do list
-- Create github repo
-- Create home page
+- DONE - Create github repo
+- DONE - Create home page
 - Config handler (look into adding files)
 - Change arguments to take path
 - Function to convert path to raw github url
