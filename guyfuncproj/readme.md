@@ -2,10 +2,10 @@
 - DONE - Create github repo
 - DONE - Create home page
 - Config handler (look into adding files)
-- Change arguments to take path
-- Function to convert path to raw github url
-- Function to download content
-- Display content
+- DONE - Change arguments to take path
+- DONE - Function to convert path to raw github url
+- DONE - Function to download content
+- DONE - Display content
 - convert to new project
 - publish
 - write up
