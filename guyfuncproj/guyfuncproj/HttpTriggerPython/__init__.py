@@ -1,25 +1,33 @@
 import logging
+import requests
 
 import azure.functions as func
 
 HEADERS = {'Content-Type': 'text/html'}
+BASE_PATH = 'https://raw.githubusercontent.com/gbowerman/functions/master/guyfuncproj/htdocs'
+
+def wget_path(path):
+    full_path = BASE_PATH + path
+    response = requests.get(full_path)
+    return response.content
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
+    path = req.params.get('path')
+    if not path:
         try:
             req_body = req.get_json()
         except ValueError:
             pass
         else:
-            name = req_body.get('name')
+            path = req_body.get('path')
 
-    if name:
-        return func.HttpResponse(f"<h1>Hello {name}!</h1>", headers=HEADERS)
+    if path:
+        html_path = wget_path(path)
+        return func.HttpResponse(html_path, headers=HEADERS)
     else:
         return func.HttpResponse(
-             "Please pass a name on the query string or in the request body",
+             "Please pass a path on the query string or in the request body",
              status_code=400
         )
