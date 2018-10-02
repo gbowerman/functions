@@ -7,6 +7,8 @@ HEADERS = {'Content-Type': 'text/html'}
 BASE_PATH = 'https://raw.githubusercontent.com/gbowerman/functions/master/guyfuncproj/htdocs'
 
 def wget_path(path):
+    if path[-1] == '/':
+        path += 'index.html'
     full_path = BASE_PATH + path
     response = requests.get(full_path)
     return response.content
