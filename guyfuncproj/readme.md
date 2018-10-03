@@ -6,6 +6,8 @@
 - DONE - Function to convert path to raw github url
 - DONE - Function to download content
 - DONE - Display content
+- DONE - comment codes
+- DONE - error handling
 - convert to new project
 - publish
 - write up
