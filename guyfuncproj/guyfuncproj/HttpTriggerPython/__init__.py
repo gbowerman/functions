@@ -4,15 +4,21 @@ import requests
 
 import azure.functions as func
 
+
 HEADERS = {'Content-Type': 'text/html'}
+
+# set this to base folder for HTML files
 BASE_PATH = 'https://raw.githubusercontent.com/gbowerman/functions/master/guyfuncproj/htdocs'
 
 def wget_path(path):
-    '''Convert Azure function path argument into a github URL and get the file'''
+    '''Convert Azure Function path argument into a github URL and get the file'''
+    # support '/' in HTML path
     if path[-1] == '/':
         path += 'index.html'
     full_path = BASE_PATH + path
+    
     # get the guthub file and return contents
+    logging.info(full_path)
     try:
         response = requests.get(full_path)
         return response.content
