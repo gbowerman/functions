@@ -3,6 +3,8 @@ env/
 
 # Python cache
 __pycache__
+.python_packages
+.vscode
 
 bin
 obj
