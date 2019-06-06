@@ -6,3 +6,6 @@ six
 azure-mgmt-compute
 azure-mgmt-resource
 azure-common
+os
+datetime
+logging
