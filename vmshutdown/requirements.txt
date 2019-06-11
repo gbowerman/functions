@@ -1,11 +1,4 @@
-azure-functions
-azure-functions-worker
-grpcio-tools
-protobuf
-six
 azure-mgmt-compute
 azure-mgmt-resource
 azure-common
-os
 datetime
-logging
