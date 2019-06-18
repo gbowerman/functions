@@ -7,7 +7,6 @@ from azure.common.credentials import ServicePrincipalCredentials
 import azure.functions as func
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.resource import ResourceManagementClient
-from dotenv import load_dotenv
 
 
 def shutdown_vm(compute_client, rg_name, vm_name):
@@ -18,15 +17,15 @@ def shutdown_vm(compute_client, rg_name, vm_name):
 
 def shutdown_vms_in_rg(compute_client, rg_name):
     """Stop deallocate all the VMs in a resource group"""
-    logging.info(f"Deallocating VMs in resource gorup: {rg_name}")
+    logging.info(f"Deallocating VMs in resource group: {rg_name}")
     for vm in compute_client.virtual_machines.list(rg_name):
         shutdown_vm(compute_client, rg_name, vm.name)
 
 
 def shutdown_vms_in_sub(compute_client, resource_client):
     """Stop deallocate all the VMs in an Azure subscription"""
+    logging.info(f"Deallocating all VMs in subscription")
     for resource_group in resource_client.resource_groups.list():
-        logging.info(f"Deallocating all VMs in subscription")
         shutdown_vms_in_rg(compute_client, resource_group.name)
 
 

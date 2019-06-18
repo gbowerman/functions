@@ -1,11 +1,17 @@
-# TimerTrigger - Python
+# VM Shutdown Azure Function
 
-The `TimerTrigger` makes it incredibly easy to have your functions executed on a schedule. This sample demonstrates a simple use case of calling your function every 5 minutes.
+This app takes a time of day, Azure subscription ID, and optionally an Azure resource group name as an app setting in the portal.
 
-## How it works
+The app is set to run on a timer trigger, and each time it runs, if the specified time of day is past, it shuts down VMs in your subscription. 
 
-For a `TimerTrigger` to work, you provide a schedule in the form of a [cron expression](https://en.wikipedia.org/wiki/Cron#CRON_expression)(See the link for full details). A cron expression is a string with 6 separate expressions which represent a given schedule via patterns. The pattern we use to represent every 5 minutes is `0 */5 * * * *`. This, in plain text, means: "When seconds is equal to 0, minutes is divisible by 5, for any hour, day of the month, month, day of the week, or year".
+If the RESOURCE_GRUOP environment variable is set, it only shuts down VMs in the named resource group. If resource group is not set, it shuts down all VMs in the subscription.
 
-## Learn more
+###Required application variable settings:
+SHUTDOWN_TIME  HH:MM:SS
+AZURE_SUBSCRIPTION_ID
+AZURE_CLIENT_SECRET
+AZURE_TENANT_ID
 
-<TODO> Documentation
+###Optional:
+RESOURCE_GROUP
+
