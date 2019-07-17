@@ -1,20 +1,13 @@
-# Azure VM Shutdown Function
+## Azure VM Shutdown Function
 
-The app takes a time of day, Azure subscription ID, and optionally an Azure resource group name as an app setting in the portal.
+The app Azure subscription ID, service principal credentials and optionally an Azure resource group name as app settings in the portal.
 
-The app is set to run on a timer trigger, and each time it runs, if the specified time of day is past, it shuts down VMs in your subscription. 
+The app is set to run on a timer trigger, and each time it runs, it shuts down VMs in your subscription. 
 
 If the Resource Group environment variable is set, it only shuts down VMs in the named resource group. If resource group is not set, it shuts down all VMs in the subscription.
 
+This app uses the Azure Functions `TimerTrigger` which makes it easy to have your functions executed on a schedule. 
 
-### Required application variable settings
-SHUTDOWN_TIME  HH:MM:SS  
-AZURE_SUBSCRIPTION_ID  
-AZURE_CLIENT_SECRET  
-AZURE_TENANT_ID  
-
-### Optional
-RESOURCE_GROUP  
 
 ## Deployment
 Set the crontab setting in function.json to the desired shutdown time in UTC. E.g. to shutdown at 5am UTC every day:
