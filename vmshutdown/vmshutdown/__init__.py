@@ -1,10 +1,10 @@
 """vmcleanup - tool to clean up resources at the specified time"""
-import datetime
 import logging
 import os
+import datetime
 
-from azure.common.credentials import ServicePrincipalCredentials
 import azure.functions as func
+from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.resource import ResourceManagementClient
 
@@ -37,37 +37,25 @@ def main(mytimer: func.TimerRequest) -> None:
     if mytimer.past_due:
         logging.info('VM Shutdown timer is past due!')
 
-    # check shutdown time
-    if "SHUTDOWN_TIME" in os.environ:
-        stop_time = os.environ["SHUTDOWN_TIME"]
+    # shutdown VMs
+    logging.info(f"VM shutdown routine triggered at {utc_timestamp}")
+
+    # connect to Azure (note: only connecting if stop_time is triggered)
+    subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
+    credentials = ServicePrincipalCredentials(
+        client_id=os.environ["AZURE_CLIENT_ID"],
+        secret=os.environ["AZURE_CLIENT_SECRET"],
+        tenant=os.environ["AZURE_TENANT_ID"]
+    )
+    compute_client = ComputeManagementClient(credentials, subscription_id)
+
+    # check if a resource group is specified, else shutdown all VMs in subscription
+    if "RESOURCE_GROUP" in os.environ:
+        shutdown_vms_in_rg(compute_client, os.environ["RESOURCE_GROUP"])
     else:
-        logging.error(f"SHUTDOWN_TIME not set")
-        return
+        resource_client = ResourceManagementClient(credentials, subscription_id)
+        shutdown_vms_in_sub(compute_client, resource_client)
 
-    # check current time
-    date_time = datetime.datetime.now()
-    time_str = date_time.strftime("%H:%M:%S")
-
-    # shutdown VMs if current time later or equal to shutdown time
-    if time_str >= stop_time:
-        logging.info(f"VM shutdown routine triggered at {time_str}")
-
-        # connect to Azure (note: only connecting if stop_time is triggered)
-        subscription_id = os.environ["AZURE_SUBSCRIPTION_ID"]
-        credentials = ServicePrincipalCredentials(
-            client_id=os.environ["AZURE_CLIENT_ID"],
-            secret=os.environ["AZURE_CLIENT_SECRET"],
-            tenant=os.environ["AZURE_TENANT_ID"]
-        )
-        compute_client = ComputeManagementClient(credentials, subscription_id)
-
-        # check if a resource group is specified, else shutdown all VMs in subscription
-        if "RESOURCE_GROUP" in os.environ:
-            shutdown_vms_in_rg(compute_client, os.environ["RESOURCE_GROUP"])
-        else:
-            resource_client = ResourceManagementClient(credentials, subscription_id)
-            shutdown_vms_in_sub(compute_client, resource_client)
-    else:
-        logging.info(f"VM shutdown not required: {time_str}")
-
-    logging.info('VM shutdown timer trigger function ran at %s', utc_timestamp)
+    utc_timestamp = datetime.datetime.utcnow().replace(
+        tzinfo=datetime.timezone.utc).isoformat()
+    logging.info(f"VM shutdown timer trigger function completed at {utc_timestamp}")
