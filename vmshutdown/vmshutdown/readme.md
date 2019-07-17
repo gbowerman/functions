@@ -6,8 +6,15 @@ The app is set to run on a timer trigger, and each time it runs, if the specifie
 
 If the Resource Group environment variable is set, it only shuts down VMs in the named resource group. If resource group is not set, it shuts down all VMs in the subscription.
 
-The `TimerTrigger` makes it easy to have your functions executed on a schedule. 
 
+### Required application variable settings
+SHUTDOWN_TIME  HH:MM:SS  
+AZURE_SUBSCRIPTION_ID  
+AZURE_CLIENT_SECRET  
+AZURE_TENANT_ID  
+
+### Optional
+RESOURCE_GROUP  
 
 ## Deployment
 Set the crontab setting in function.json to the desired shutdown time in UTC. E.g. to shutdown at 5am UTC every day:
