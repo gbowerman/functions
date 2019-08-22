@@ -40,4 +40,4 @@ AZURE_CLIENT_SECRET
 AZURE_TENANT_ID 
 
 Optional:  
-RESOURCE_GROUP (only shutdown VMs in this resrouce group)  
+RESOURCE_GROUP (only shutdown VMs in this resource group)  
